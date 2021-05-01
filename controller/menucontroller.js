@@ -1,4 +1,5 @@
 const menu = require('../models/menuSchema');
+const order = require('../models/orderSchema');
 
 const getAllProducts = async(req, res) =>{
     
@@ -43,8 +44,45 @@ const createProduct = async(req, res) => {
     }
 } 
 
+const postOrder = async(req, res) => {
+
+    
+    console.log(req.body);
+   // const [FormData, price, cart, user] = req.body;
+    const newOrder = new order({customer : req.body.user, items : req.body.cart, phone: req.body.FormData.phone, address : req.body.FormData.address, totalPrice : req.body.price});
+
+    try {
+
+        await newOrder.save();
+
+    res.status(201).json(newOrder);
+        
+    } catch (error) {
+           console.log(error);        
+    }
+}
+
+const getOrder = async(req, res) =>{
+    
+    try {
+
+        console.log(req.body);
+        
+        const getData = await order.find({customer : req.body.id}, null, {sort : {'createdAt' : -1}});
+        res.status(200).send(getData);
+
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).send("Server Error");
+    }
+}
+
 module.exports = {
     getAllProducts,
     getProductById,
-    createProduct
+    createProduct,
+    postOrder,
+    getOrder
+      
 }

@@ -55,6 +55,9 @@ const postOrder = async(req, res) => {
 
         await newOrder.save();
 
+        const eventEmitter = req.app.get('eventEmitter');
+        eventEmitter.emit('orderPlaced', newOrder);
+
     res.status(201).json(newOrder);
         
     } catch (error) {
@@ -78,11 +81,35 @@ const getOrder = async(req, res) =>{
     }
 }
 
+const updateStatus = async(req, res) => {
+
+    try {
+
+        console.log(req.body);
+
+        await order.updateOne({_id : req.body.order}, {status : req.body.status}, (err, data) => {
+
+            if(err){
+                console.log(err);
+            }
+
+            const eventEmitter = req.app.get('eventEmitter');
+            eventEmitter.emit('orderUpdated', {id : req.body.order, status : req.body.status})
+
+        })
+        
+    } catch (error) {
+        console.log(error);
+    }
+
+}
+
 module.exports = {
     getAllProducts,
     getProductById,
     createProduct,
     postOrder,
-    getOrder
+    getOrder,
+    updateStatus
       
 }

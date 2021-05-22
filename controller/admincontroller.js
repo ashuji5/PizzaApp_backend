@@ -5,7 +5,7 @@ const getAllOrders = async(req, res) =>{
     
     try {
         
-        const getData = await order.find({});
+        const getData = await order.find().sort({'createdAt' : -1});
         console.log(req.headers)
         res.status(200).json(getData);
 

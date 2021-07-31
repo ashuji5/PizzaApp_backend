@@ -69,7 +69,7 @@ const getOrder = async(req, res) =>{
     
     try {
 
-        console.log(req.body);
+        console.log(req.body.id);
         
         const getData = await order.find({customer : req.body.id}, null, {sort : {'createdAt' : -1}});
         res.status(200).send(getData);

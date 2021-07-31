@@ -5,7 +5,7 @@ const postOrder = async(req, res) => {
     try {
 
         const order = req.body;
-        console.log(order);
+        // console.log(order);
 
         
     } catch (error) {
